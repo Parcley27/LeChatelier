@@ -1,4 +1,11 @@
 import * as THREE from 'three';
+// Coord - ... +
+// X is left ... right
+// Y is down ... up
+// Z is back ... front
+
+const terrainSize = 100;
+const terrainResolution = 64; // 2^6
 
 // Create scene
 const scene = new THREE.Scene();
@@ -12,24 +19,43 @@ const camera = new THREE.PerspectiveCamera(
   1000 // Far clipping plane
 
 );
-camera.position.set(0, 20, 60);
+
+camera.position.set(0, 40, 60);
+camera.rotation.x = -Math.PI / 6
 
 // Create renderer
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement); // Add canvas to page
 
-// Create starter cube
-const geometry = new THREE.BoxGeometry(10, 10, 10);
-const material = new THREE.MeshBasicMaterial({ color: 0x0000ff });
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+// Create geometry plane
+// Planes are defined as vertical by default
+const geometry = new THREE.PlaneGeometry(
+    terrainSize, // Width
+    terrainSize, // Height
+    terrainResolution, // Width resolution
+    terrainResolution // Height resolution
+
+);
+
+const material = new THREE.MeshBasicMaterial({
+  color: 0x0000ff,
+  wireframe: true
+
+});
+
+const terrain = new THREE.Mesh(geometry, material);
+
+// Rotate to flat
+terrain.rotation.x = -Math.PI / 2;
+
+scene.add(terrain);
 
 // Animation loop
 function animate() {
   requestAnimationFrame(animate);
   
-  cube.rotation.y += 0.01;
+  terrain.rotation.z += 0.002;
   
   renderer.render(scene, camera);
 
