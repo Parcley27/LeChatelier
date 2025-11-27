@@ -1,8 +1,10 @@
+// three.js coordinate  - ... +
+// x is left ... right
+// y is down ... up
+// z is back ... front
+
 import * as THREE from 'three';
-// Coord - ... +
-// X is left ... right
-// Y is down ... up
-// Z is back ... front
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const terrainSize = 100;
 const terrainResolution = 64; // 2^6
@@ -27,6 +29,13 @@ camera.rotation.x = -Math.PI / 6
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement); // Add canvas to page
+
+// Orbit controls
+const controls = new OrbitControls(camera, renderer.domElement);
+
+controls.enableDamping = true;
+controls.dampingFactor = 0.1;
+controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
 
 // Create geometry plane
 // Planes are defined as vertical by default
@@ -55,7 +64,7 @@ scene.add(terrain);
 function animate() {
   requestAnimationFrame(animate);
   
-  terrain.rotation.z += 0.002;
+  controls.update;
   
   renderer.render(scene, camera);
 
