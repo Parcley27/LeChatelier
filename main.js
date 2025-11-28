@@ -24,8 +24,24 @@ const camera = new three.PerspectiveCamera(
 
 );
 
-camera.position.set(0, 40, 60);
+camera.position.set(0, 60, 80);
 camera.rotation.x = -Math.PI / 6
+
+// Lights
+const ambientLight = new three.AmbientLight(0xffffff, 0.4);
+scene.add(ambientLight);
+
+const keyLight = new three.DirectionalLight(0xffffff, 0.8);
+keyLight.position.set(20, 100, 10);
+scene.add(keyLight);
+
+const rimLight = new three.DirectionalLight(0xffffff, 0.5);
+rimLight.position.set(0, 30, -50);
+scene.add(rimLight);
+
+const fillLight = new three.DirectionalLight(0xffffff, 1.2);
+fillLight.position.set(0, -10, 0);
+scene.add(fillLight);
 
 // Create renderer
 const renderer = new three.WebGLRenderer({ antialias: true });
@@ -69,9 +85,11 @@ for (let i = 0; i < positions.count; i++) {
 positions.needsUpdate = true;
 geometry.computeVertexNormals();
 
-const material = new three.MeshBasicMaterial({
+const material = new three.MeshStandardMaterial({
   color: 0x0000ff,
-  wireframe: true
+  roughness: 0.65,
+  metalness: 0.2,
+  wireframe: false
 
 });
 
