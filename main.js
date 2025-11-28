@@ -9,6 +9,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 const terrainSize = 100;
 const terrainResolution = 64; // 2^6
 
+const startingHeight = 15;
+
 // Create scene
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x000000);
@@ -46,6 +48,26 @@ const geometry = new THREE.PlaneGeometry(
     terrainResolution // Height resolution
 
 );
+
+const positions = geometry.attributes.position;
+
+for (let i = 0; i < positions.count; i++) {
+    let x = positions.getX(i);
+
+    // Height graph 
+    //https://www.desmos.com/3d/btdxdtzb4d
+    const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * startingHeight;
+    const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * startingHeight;
+
+    const height = leftPeak + rightPeak;
+
+    positions.setZ(i, height);
+    
+}
+
+// Render updates and recompute normals for lighting
+positions.needsUpdate = true;
+geometry.computeVertexNormals();
 
 const material = new THREE.MeshBasicMaterial({
   color: 0x0000ff,
