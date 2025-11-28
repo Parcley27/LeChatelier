@@ -3,7 +3,7 @@
 // y is down ... up
 // z is back ... front
 
-import * as THREE from 'three';
+import * as three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const terrainSize = 100;
@@ -12,11 +12,11 @@ const terrainResolution = 64; // 2^6
 const startingHeight = 15;
 
 // Create scene
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
+const scene = new three.Scene();
+scene.background = new three.Color(0x000000);
 
 // Create camera
-const camera = new THREE.PerspectiveCamera(
+const camera = new three.PerspectiveCamera(
   75, // Field of view
   window.innerWidth / window.innerHeight, // Aspect ratio
   0.1, // Near clipping plane
@@ -28,7 +28,7 @@ camera.position.set(0, 40, 60);
 camera.rotation.x = -Math.PI / 6
 
 // Create renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new three.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement); // Add canvas to page
 
@@ -41,7 +41,7 @@ controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
 
 // Create geometry plane
 // Planes are defined as vertical by default
-const geometry = new THREE.PlaneGeometry(
+const geometry = new three.PlaneGeometry(
     terrainSize, // Width
     terrainSize, // Height
     terrainResolution, // Width resolution
@@ -69,13 +69,13 @@ for (let i = 0; i < positions.count; i++) {
 positions.needsUpdate = true;
 geometry.computeVertexNormals();
 
-const material = new THREE.MeshBasicMaterial({
+const material = new three.MeshBasicMaterial({
   color: 0x0000ff,
   wireframe: true
 
 });
 
-const terrain = new THREE.Mesh(geometry, material);
+const terrain = new three.Mesh(geometry, material);
 
 // Rotate to flat
 terrain.rotation.x = -Math.PI / 2;
