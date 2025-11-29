@@ -4,7 +4,7 @@
 // z is back ... front
 
 import * as three from 'three';
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createNoise2D} from 'simplex-noise';
 import systemsData from "./equilibrium-systems.json";
 
@@ -21,14 +21,16 @@ let historyIndex = 0;
 
 let targetingSpeed = 0.02 / 5;
 
-let equilibriumPosition  = 0.5;
-let targetPosition = equilibriumPosition;
+const defaultEquilibriumPosition = 0.5;
+let equilibriumPosition  = defaultEquilibriumPosition;
+let targetPosition = defaultEquilibriumPosition;
 
 let sliderPosition = equilibriumPosition * 100;
 let targetSliderPosition = sliderPosition;
 
-let totalConcentration = 1.0;
-let targetConcentration = totalConcentration;
+const defaultConcentration = 1.0;
+let totalConcentration = defaultConcentration;
+let targetConcentration = defaultConcentration;
 
 const systems = {};
 systemsData.systems.forEach(system => {
@@ -150,7 +152,7 @@ function animate() {
     updateTerrain(equilibriumPosition);
     updateColours(equilibriumPosition);
 
-    //controls.update();
+    controls.update();
 
     renderer.render(scene, camera);
 
@@ -198,11 +200,11 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement); // Add canvas to page
 
 // Orbit controls
-//const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
 
-//controls.enableDamping = true;
-//controls.dampingFactor = 0.1;
-//controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
+controls.enableDamping = true;
+controls.dampingFactor = 0.1;
+controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
 
 // Create geometry plane
 // Planes are defined as vertical by default
@@ -228,6 +230,19 @@ systemSelect.addEventListener("change", (e) => {
 
     equationDisplay.textContent = currentSystem.equation;
     descriptionDisplay.textContent = currentSystem.description;
+
+    // Reset position and concentration to defaults
+    equilibriumPosition = defaultEquilibriumPosition;
+    targetPosition = defaultEquilibriumPosition;
+    totalConcentration = defaultConcentration;
+    targetConcentration = defaultConcentration;
+    sliderPosition = defaultEquilibriumPosition * 100;
+    targetSliderPosition = defaultEquilibriumPosition * 100;
+
+    // Clear history when reaction changes
+    equilibriumHistory.fill(defaultEquilibriumPosition);
+    concentrationHistory.fill(defaultConcentration);
+    historyIndex = 0;
 
     updateColours(equilibriumPosition);
 
