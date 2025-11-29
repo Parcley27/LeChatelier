@@ -213,17 +213,27 @@ const geometry = new three.PlaneGeometry(
 updateTerrain(equilibriumPosition );
 
 const systemSelect = document.getElementById("equilibrium-selector");
+const equationDisplay = document.getElementById("equation");
+const descriptionDisplay = document.getElementById("description");
+
 systemSelect.addEventListener("change", (e) => {
     currentSystem = systems[e.target.value];
 
     reactantColour.set(currentSystem.reactantColour || 0xff0000);
     productColour.set(currentSystem.productColour || 0x0000ff);
 
+    equationDisplay.textContent = currentSystem.equation;
+    descriptionDisplay.textContent = currentSystem.description;
+
     updateColours(equilibriumPosition);
 
 })
 
+equationDisplay.textContent = currentSystem.equation;
+descriptionDisplay.textContent = currentSystem.description;
+
 const slider = document.getElementById("equilibrium-slider");
+
 slider.addEventListener("input", (e) => {
     const value = parseFloat(e.target.value);
     targetPosition = value / 100;
@@ -234,6 +244,7 @@ slider.addEventListener("input", (e) => {
 })
 
 const buttons = document.querySelectorAll("[data-stress]");
+
 buttons.forEach(button => {
     button.addEventListener("click", (e) => {
         const stress = button.dataset.stress;
@@ -252,12 +263,24 @@ buttons.forEach(button => {
                 break;
             
             case "heat":
-                targetPosition = Math.min(1, targetPosition + 0.05); // Assuming endothermic for now
+                if (currentSystem.isEndothermic) {
+                    targetPosition = Math.min(1, targetPosition + 0.05);
+
+                } else {
+                    targetPosition = Math.max(0, targetPosition - 0.05);
+
+                }
 
                 break;
             
             case "cool":
-                targetPosition = Math.max(0, targetPosition - 0.05); // Again assuming endothermic
+                if (currentSystem.isEndothermic) {
+                    targetPosition = Math.max(0, targetPosition - 0.05);
+                
+                } else {
+                    targetPosition = Math.min(1, targetPosition + 0.1);
+
+                } 
 
                 break;
             
