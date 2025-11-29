@@ -17,7 +17,7 @@ const historyLength = 2100;
 const equilibriumHistory = new Array(historyLength).fill(0.5);
 let historyIndex = 0;
 
-let targetingSpeed = 0.02;
+let targetingSpeed = 0.02 / 5;
 
 let equilibriumPosition  = 0.5;
 let targetPosition = equilibriumPosition;
