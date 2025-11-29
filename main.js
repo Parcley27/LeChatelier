@@ -12,8 +12,13 @@ const terrainResolution = 64; // 2^6
 const startingHeight = 15;
 const hillAmplitude = 20;
 
+let targetingSpeed = 0.02;
+
 let equilibriumPosition  = 0.5;
 let targetPosition = equilibriumPosition;
+
+let sliderPosition = equilibriumPosition * 100;
+let targetSliderPosition = sliderPosition;
 
 const colours = [];
 
@@ -46,7 +51,12 @@ function animate() {
 
     // Smooth transition between actual and target positions
     const difference = targetPosition - equilibriumPosition;
-    equilibriumPosition  += difference * 0.04;
+    equilibriumPosition  += difference * targetingSpeed;
+
+    // Smooth transition for slider position
+    const sliderDifference = targetSliderPosition - sliderPosition;
+    sliderPosition += sliderDifference * targetingSpeed;
+    slider.value = sliderPosition;
 
     // Only update terrain if there's a sensible difference
     if (Math.abs(difference) > 0.001) {
@@ -118,8 +128,45 @@ updateTerrain(equilibriumPosition );
 
 const slider = document.getElementById("equilibrium-slider");
 slider.addEventListener("input", (e) => {
-    targetPosition = parseFloat(e.target.value) / 100;
+    const value = parseFloat(e.target.value);
+    targetPosition = value / 100;
+    // Sync slider positions to prevent animation from fighting manual input
+    sliderPosition = value;
+    targetSliderPosition = value;
 
+})
+
+const buttons = document.querySelectorAll("[data-stress]");
+buttons.forEach(button => {
+    button.addEventListener("click", (e) => {
+        const stress = button.dataset.stress;
+
+        switch (stress) {
+            case "reactant":
+                targetPosition = Math.max(0, targetPosition - 0.1);
+                
+                break;
+            
+            case "product":
+                targetPosition = Math.min(1, targetPosition + 0.1);
+
+                break;
+            
+            case "heat":
+                targetPosition = Math.min(1, targetPosition + 0.05); // Assuming endothermic for now
+
+                break;
+            
+            case "cool":
+                targetPosition = Math.max(0, targetPosition - 0.05); // Again assuming endothermic
+
+                break;
+
+        }
+
+        targetSliderPosition = targetPosition * 100;
+
+    })
 })
 
 const colourA = new three.Color(0xff0000);
