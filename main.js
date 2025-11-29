@@ -6,6 +6,7 @@
 import * as three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createNoise2D} from 'simplex-noise';
+import systemsData from "./equilibrium-systems.json";
 
 const terrainSize = 100;
 const terrainResolution = 128; // 2^6
@@ -29,10 +30,18 @@ let targetSliderPosition = sliderPosition;
 let totalConcentration = 1.0;
 let targetConcentration = totalConcentration;
 
+const systems = {};
+systemsData.systems.forEach(system => {
+    systems[system.id] = system;
+
+});
+
+let currentSystem = "btb" // btb, fescn, cu ammine, cu aqua, cobalt, co2
+
 const colours = [];
 
-const colourA = new three.Color(0xff0000);
-const colourB = new three.Color(0x0000ff);
+const reactantColour = new three.Color(systems[currentSystem].reactantColour || 0xff0000);
+const productColour = new three.Color(systems[currentSystem].productColour || 0x0000ff);
 
 let frameCount = 0;
 const simulationSpeed = 1/150;
@@ -111,7 +120,7 @@ function updateColours(equilibriumPosition) {
         const mixFactor = Math.max(0, Math.min(1, baseMixFactor + (historicalEquilibrium - 0.5)));
 
         const colour = new three.Color();
-        colour.lerpColors(colourA, colourB, mixFactor);
+        colour.lerpColors(reactantColour, productColour, mixFactor);
 
         colourAttribute.setXYZ(i, colour.r, colour.g, colour.b);
 

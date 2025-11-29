@@ -1,0 +1,58 @@
+{
+  "systems": [
+    {
+      "id": "btb",
+      "name": "Bromothymol Blue",
+      "equation": "HIn(aq) ⇌ H⁺(aq) + In⁻(aq)",
+      "reactantColour": "#E5C174",
+      "productColour": "#4A7C97",
+      "isEndothermic": true,
+      "description": "Acid-base indicator equilibrium"
+    },
+    {
+      "id": "fescn",
+      "name": "Iron Thiocyanate",
+      "equation": "Fe³⁺(aq) + SCN⁻(aq) ⇌ FeSCN²⁺(aq)",
+      "reactantColour": "#E8DCC4",
+      "productColour": "#8B2635",
+      "isEndothermic": false,
+      "description": "Iron(III) thiocyanate complex formation"
+    },
+    {
+      "id": "cu ammine",
+      "name": "Copper Ammine",
+      "equation": "[Cu(H₂O)₆]²⁺(aq) + 4NH₃(aq) ⇌ [Cu(NH₃)₄(H₂O)₂]²⁺(aq) + 4H₂O(l)",
+      "reactantColour": "#87CEEB",
+      "productColour": "#0047AB",
+      "isEndothermic": true,
+      "description": "Copper(II) ammine complex equilibrium"
+    },
+    {
+      "id": "cu aqua",
+      "name": "Copper Aqua-Chloro",
+      "equation": "[Cu(H₂O)₆]²⁺(aq) + 4Cl⁻(aq) ⇌ [CuCl₄]²⁻(aq) + 6H₂O(l)",
+      "reactantColour": "#5B9FD5",
+      "productColour": "#2E5C3F",
+      "isEndothermic": true,
+      "description": "Copper(II) chloride complex equilibrium"
+    },
+    {
+      "id": "cobalt",
+      "name": "Cobalt Aqua-Chloro",
+      "equation": "[Co(H₂O)₆]²⁺ + 4Cl⁻ + Energy ⇌ [CoCl₄]²⁻ + 6H₂O",
+      "reactantColour": "#D4A5C5",
+      "productColour": "#3B5F8F",
+      "isEndothermic": true,
+      "description": "Cobalt(II) chloride complex equilibrium"
+    },
+    {
+        "id": "co2",
+        "name": "Carbon Dioxide Acid-Base",
+        "equation": "CO₂(aq) + H₂O(l) ⇌ H₂CO₃(aq) ⇌ H⁺(aq) + HCO₃⁻(aq)",
+        "reactantColour": "#E8F4F8",
+        "productColour": "#FFE5B4",
+        "isEndothermic": false,
+        "description": "Carbon dioxide acidity equilibrium"
+    }
+  ]
+}
