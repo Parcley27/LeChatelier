@@ -23,6 +23,9 @@ let targetSliderPosition = sliderPosition;
 
 const colours = [];
 
+const colourA = new three.Color(0xff0000);
+const colourB = new three.Color(0x0000ff);
+
 const noise = createNoise2D();
 const noiseAmplitude = 0.40;
 const noiseResultion = 0.15;
@@ -34,7 +37,7 @@ function updateTerrain(equilibriumPosition ) {
         let x = positions.getX(i);
         let y = positions.getY(i)
 
-        // Height graph 
+        // Height graph
         //https://www.desmos.com/3d/btdxdtzb4d
         const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - equilibriumPosition );
         const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * equilibriumPosition ;
@@ -45,12 +48,38 @@ function updateTerrain(equilibriumPosition ) {
         const height = leftPeak + rightPeak + (noiseValue * x / 20);
 
         positions.setZ(i, height);
-      
+
     }
 
     // Render updates and recompute normals for lighting
     positions.needsUpdate = true;
     geometry.computeVertexNormals();
+
+}
+
+function updateColors(equilibriumPosition) {
+    const positions = geometry.attributes.position;
+    const colorAttribute = geometry.attributes.color;
+
+    for (let i = 0; i < positions.count; i++) {
+        const x = positions.getX(i);
+
+        // Base mix factor from position (0 = left/red, 1 = right/blue)
+        const baseMixFactor = (x + 50) / 100;
+
+        // Adjust mix factor based on equilibrium position
+        // When equilibrium is right (1.0), bias toward blue
+        // When equilibrium is left (0.0), bias toward red
+        const mixFactor = Math.max(0, Math.min(1, baseMixFactor + (equilibriumPosition - 0.5)));
+
+        const colour = new three.Color();
+        colour.lerpColors(colourA, colourB, mixFactor);
+
+        colorAttribute.setXYZ(i, colour.r, colour.g, colour.b);
+
+    }
+
+    colorAttribute.needsUpdate = true;
 
 }
 
@@ -70,7 +99,8 @@ function animate() {
     // Only update terrain if there's a sensible difference
     if (Math.abs(difference) > 0.001) {
         updateTerrain(equilibriumPosition);
-
+        updateColors(equilibriumPosition);
+        
     }
 
     controls.update();
@@ -178,23 +208,16 @@ buttons.forEach(button => {
     })
 })
 
-const colourA = new three.Color(0xff0000);
-const colourB = new three.Color(0x0000ff);
-
 const positions = geometry.attributes.position;
-for (let i = 0; i < positions.count; i++) {
-    const x = positions.getX(i);
-
-    const mixFactor = (x + 50) / 100;
-
-    const colour = new three.Color();
-    colour.lerpColors(colourA, colourB, mixFactor);
-
-    colours.push(colour.r, colour.g, colour.b);
-
+// Initialize colors array with zeros
+for (let i = 0; i < positions.count * 3; i++) {
+    colours.push(0);
 }
 
 geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
+
+// Set initial colors based on equilibrium position
+updateColors(equilibriumPosition);
 
 const material = new three.MeshStandardMaterial({
     roughness: 0.65,
