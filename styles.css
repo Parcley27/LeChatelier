@@ -29,7 +29,7 @@ body {
     display: flex;
     gap: 12px;
     justify-content: center;
-    padding-bottom: 10px;
+    padding-top: 12px;
 
 }
 
@@ -37,6 +37,8 @@ button {
     background: rgba(30, 30, 30, 0.8);
     border: 1px solid rgba(150, 150, 150, 0.3);
     border-radius: 8px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
     color: rgba(255, 255, 255, 0.6);
     padding: 10px 18px;
     font-family: 'Courier New', monospace;
@@ -61,7 +63,9 @@ button:hover {
     padding: 20px 30px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(150, 150, 150, 0.3);
-    border-radius: 16px;
+    border-radius: 8px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
     pointer-events: auto;
     min-width: 400px;
 

@@ -10,26 +10,28 @@
 
     <body>
         <div class = "ui"> 
-            <div class = "stress-buttons">
-                <button data-stress = "reactant">+ [Reactant]</button>
-                <button data-stress = "product">+ [Product]</button>
-                
-                <button data-stress = "heat">Heat</button>
-                <button data-stress = "cool">Cool</button>
-
-            </div>
-
-            <padding></padding>
-
             <div class = "slider-container">
                 <input type = "range" id = "equilibrium-slider" min = "0" max = "100" value = 50 />
 
                 <div class = "slider-labels">
-                    <span>Reactants</span>
-                    <span>Products</span>
+                    <span>Favours Reactants</span>
+                    <span>Equilibrium Balance</span>
+                    <span>Favours Products</span>
 
                 </div>
             </div>
+
+            <div class = "stress-buttons">
+                <button data-stress = "reactant">Increase [Reactants]</button>
+                <button data-stress = "product">Increase [Products]</button>
+                
+                <button data-stress = "heat">Heat</button>
+                <button data-stress = "cool">Cool</button>
+
+                <button data-stress = "reduce-concentration">Reduce [Solution]</button>
+
+            </div>
+
         </div>
 
         <script type = "module" src = "main.js"></script>
