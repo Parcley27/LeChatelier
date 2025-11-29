@@ -26,12 +26,17 @@ const colours = [];
 const colourA = new three.Color(0xff0000);
 const colourB = new three.Color(0x0000ff);
 
+let frameCount = 0;
+const simulationSpeed = 1/300;
+
 const noise = createNoise2D();
 const noiseAmplitude = 0.40;
 const noiseResultion = 0.15;
 
 function updateTerrain(equilibriumPosition ) {
     const positions = geometry.attributes.position;
+
+    frameCount += 1;
 
     for (let i = 0; i < positions.count; i++) {
         let x = positions.getX(i);
@@ -43,7 +48,7 @@ function updateTerrain(equilibriumPosition ) {
         const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * equilibriumPosition ;
 
         // Noise for texture
-        const noiseValue = noise(x * noiseResultion, y * noiseResultion) * noiseAmplitude;
+        const noiseValue = noise(x * noiseResultion, y * noiseResultion - frameCount * simulationSpeed) * noiseAmplitude;
 
         const height = leftPeak + rightPeak + (noiseValue * x / 20);
 
@@ -96,12 +101,8 @@ function animate() {
     sliderPosition += sliderDifference * targetingSpeed;
     slider.value = sliderPosition;
 
-    // Only update terrain if there's a sensible difference
-    if (Math.abs(difference) > 0.001) {
-        updateTerrain(equilibriumPosition);
-        updateColors(equilibriumPosition);
-        
-    }
+    updateTerrain(equilibriumPosition);
+    updateColors(equilibriumPosition);
 
     controls.update();
 
