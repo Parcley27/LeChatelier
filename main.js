@@ -10,8 +10,44 @@ const terrainSize = 100;
 const terrainResolution = 64; // 2^6
 
 const startingHeight = 15;
+const hillAmplitude = 20;
+
+let equilibriumPosition  = 0.5;
 
 const colours = [];
+
+function updateTerrain(equilibriumPosition ) {
+    const positions = geometry.attributes.position;
+
+    for (let i = 0; i < positions.count; i++) {
+        let x = positions.getX(i);
+
+        // Height graph 
+        //https://www.desmos.com/3d/btdxdtzb4d
+        const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - equilibriumPosition );
+        const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * equilibriumPosition ;
+
+        const height = leftPeak + rightPeak;
+
+        positions.setZ(i, height);
+      
+    }
+
+    // Render updates and recompute normals for lighting
+    positions.needsUpdate = true;
+    geometry.computeVertexNormals();
+
+}
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+
+  controls.update();
+
+  renderer.render(scene, camera);
+
+}
 
 // Create scene
 const scene = new three.Scene();
@@ -67,29 +103,19 @@ const geometry = new three.PlaneGeometry(
 
 );
 
-const positions = geometry.attributes.position;
+updateTerrain(equilibriumPosition );
 
-for (let i = 0; i < positions.count; i++) {
-    let x = positions.getX(i);
+const slider = document.getElementById("equilibrium-slider");
+slider.addEventListener("input", (e) => {
+    equilibriumPosition = parseFloat(e.target.value) / 100;
+    updateTerrain(equilibriumPosition);
 
-    // Height graph 
-    //https://www.desmos.com/3d/btdxdtzb4d
-    const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * startingHeight;
-    const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * startingHeight;
-
-    const height = leftPeak + rightPeak;
-
-    positions.setZ(i, height);
-    
-}
-
-// Render updates and recompute normals for lighting
-positions.needsUpdate = true;
-geometry.computeVertexNormals();
+})
 
 const colourA = new three.Color(0xff0000);
 const colourB = new three.Color(0x0000ff);
 
+const positions = geometry.attributes.position;
 for (let i = 0; i < positions.count; i++) {
   const x = positions.getX(i);
 
@@ -119,16 +145,6 @@ const terrain = new three.Mesh(geometry, material);
 terrain.rotation.x = -Math.PI / 2;
 
 scene.add(terrain);
-
-// Animation loop
-function animate() {
-  requestAnimationFrame(animate);
-  
-  controls.update;
-  
-  renderer.render(scene, camera);
-
-}
 
 animate();
 
