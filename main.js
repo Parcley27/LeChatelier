@@ -11,6 +11,8 @@ const terrainResolution = 64; // 2^6
 
 const startingHeight = 15;
 
+const colours = [];
+
 // Create scene
 const scene = new three.Scene();
 scene.background = new three.Color(0x000000);
@@ -85,8 +87,25 @@ for (let i = 0; i < positions.count; i++) {
 positions.needsUpdate = true;
 geometry.computeVertexNormals();
 
+const colourA = new three.Color(0xff0000);
+const colourB = new three.Color(0x0000ff);
+
+for (let i = 0; i < positions.count; i++) {
+  const x = positions.getX(i);
+
+  const mixFactor = (x + 50) / 100;
+
+  const colour = new three.Color();
+  colour.lerpColors(colourA, colourB, mixFactor);
+
+  colours.push(colour.r, colour.g, colour.b);
+
+}
+
+geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
+
 const material = new three.MeshStandardMaterial({
-  color: 0x0000ff,
+  vertexColors: true,
   roughness: 0.65,
   metalness: 0.2,
   wireframe: false
