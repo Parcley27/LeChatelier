@@ -136,7 +136,7 @@ const camera = new three.PerspectiveCamera(
 
 );
 
-camera.position.set(0, 60, 80);
+camera.position.set(0, 60, 90);
 camera.rotation.x = -Math.PI / 6
 
 // Lights
@@ -248,6 +248,7 @@ const terrain = new three.Mesh(geometry, material);
 terrain.rotation.x = -Math.PI / 2;
 
 scene.add(terrain);
+terrain.position.z = -10;
 
 animate();
 
