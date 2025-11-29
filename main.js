@@ -15,6 +15,7 @@ const hillAmplitude = 20;
 
 const historyLength = 2100;
 const equilibriumHistory = new Array(historyLength).fill(0.5);
+const concentrationHistory = new Array(historyLength).fill(1.0);
 let historyIndex = 0;
 
 let targetingSpeed = 0.02 / 5;
@@ -25,6 +26,9 @@ let targetPosition = equilibriumPosition;
 let sliderPosition = equilibriumPosition * 100;
 let targetSliderPosition = sliderPosition;
 
+let totalConcentration = 1.0;
+let targetConcentration = totalConcentration;
+
 const colours = [];
 
 const colourA = new three.Color(0xff0000);
@@ -34,14 +38,19 @@ let frameCount = 0;
 const simulationSpeed = 1/150;
 
 const noise = createNoise2D();
-const noiseAmplitude = 0.40;
+const noiseAmplitude = 0.25; 
 const noiseResultion = 0.15;
 
 function getHistory(y) {
     const normalizedY = (y + terrainSize / 2) / terrainSize; // 0 ... 1
     const historyLookback = Math.floor(normalizedY * (historyLength - 1));
     const lookbackIndex = (historyIndex - historyLookback + historyLength) % historyLength;
-    return equilibriumHistory[lookbackIndex];
+
+    return {
+        equilibrium: equilibriumHistory[lookbackIndex],
+        concentration: concentrationHistory[lookbackIndex]
+
+    };
 
 }
 
@@ -52,18 +61,21 @@ function updateTerrain(equilibriumPosition ) {
 
     // Update history buffer
     historyIndex = (historyIndex + 1) % historyLength;
+
     equilibriumHistory[historyIndex] = equilibriumPosition;
+    concentrationHistory[historyIndex] = totalConcentration;
 
     for (let i = 0; i < positions.count; i++) {
         let x = positions.getX(i);
         let y = positions.getY(i)
 
-        const historicalEquilibrium = getHistory(y);
+        const historicalEquilibrium = getHistory(y).equilibrium;
+        const historicalConcentration = getHistory(y).concentration;
 
         // Height graph
         //https://www.desmos.com/3d/btdxdtzb4d
-        const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - historicalEquilibrium );
-        const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * historicalEquilibrium ;
+        const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - historicalEquilibrium ) * historicalConcentration;
+        const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * historicalEquilibrium * historicalConcentration;
 
         // Noise for texture
         const noiseValue = noise(x * noiseResultion, y * noiseResultion - frameCount * simulationSpeed) * noiseAmplitude;
@@ -88,7 +100,7 @@ function updateColours(equilibriumPosition) {
         const x = positions.getX(i);
         const y = positions.getY(i);
 
-        const historicalEquilibrium = getHistory(y);
+        const historicalEquilibrium = getHistory(y).equilibrium;
 
         // Base mix factor from position (0 = left/red, 1 = right/blue)
         const baseMixFactor = (x + 50) / 100;
@@ -116,6 +128,10 @@ function animate() {
     // Smooth transition between actual and target positions
     const difference = targetPosition - equilibriumPosition;
     equilibriumPosition  += difference * targetingSpeed;
+
+    // Transition for concentration
+    const concentrationDifference = targetConcentration - totalConcentration;
+    totalConcentration += concentrationDifference * targetingSpeed;
 
     // Smooth transition for slider position
     const sliderDifference = targetSliderPosition - sliderPosition;
@@ -205,11 +221,13 @@ buttons.forEach(button => {
         switch (stress) {
             case "reactant":
                 targetPosition = Math.max(0, targetPosition - 0.1);
+                targetConcentration = Math.min(5.0, targetConcentration + 0.1);
                 
                 break;
             
             case "product":
                 targetPosition = Math.min(1, targetPosition + 0.1);
+                targetConcentration = Math.min(5.0, targetConcentration + 0.1);
 
                 break;
             
@@ -220,6 +238,11 @@ buttons.forEach(button => {
             
             case "cool":
                 targetPosition = Math.max(0, targetPosition - 0.05); // Again assuming endothermic
+
+                break;
+            
+            case "reduce-concentration":
+                targetConcentration = Math.max(0.5, targetConcentration - 0.1);
 
                 break;
 
