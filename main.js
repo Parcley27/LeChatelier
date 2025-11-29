@@ -37,6 +37,14 @@ const noise = createNoise2D();
 const noiseAmplitude = 0.40;
 const noiseResultion = 0.15;
 
+function getHistory(y) {
+    const normalizedY = (y + terrainSize / 2) / terrainSize; // 0 ... 1
+    const historyLookback = Math.floor(normalizedY * (historyLength - 1));
+    const lookbackIndex = (historyIndex - historyLookback + historyLength) % historyLength;
+    return equilibriumHistory[lookbackIndex];
+
+}
+
 function updateTerrain(equilibriumPosition ) {
     const positions = geometry.attributes.position;
 
@@ -50,10 +58,7 @@ function updateTerrain(equilibriumPosition ) {
         let x = positions.getX(i);
         let y = positions.getY(i)
 
-        const normalizedY = (y + terrainSize / 2) / terrainSize; // 0 ... 1
-        const historyLookback = Math.floor(normalizedY * (historyLength - 1));
-        const lookbackIndex = (historyIndex - historyLookback + historyLength) % historyLength;
-        const historicalEquilibrium = equilibriumHistory[lookbackIndex];
+        const historicalEquilibrium = getHistory(y);
 
         // Height graph
         //https://www.desmos.com/3d/btdxdtzb4d
@@ -75,12 +80,15 @@ function updateTerrain(equilibriumPosition ) {
 
 }
 
-function updateColors(equilibriumPosition) {
+function updateColours(equilibriumPosition) {
     const positions = geometry.attributes.position;
     const colourAttribute = geometry.attributes.color;
 
     for (let i = 0; i < positions.count; i++) {
         const x = positions.getX(i);
+        const y = positions.getY(i);
+
+        const historicalEquilibrium = getHistory(y);
 
         // Base mix factor from position (0 = left/red, 1 = right/blue)
         const baseMixFactor = (x + 50) / 100;
@@ -88,7 +96,7 @@ function updateColors(equilibriumPosition) {
         // Adjust mix factor based on equilibrium position
         // When equilibrium is right (1.0), bias toward blue
         // When equilibrium is left (0.0), bias toward red
-        const mixFactor = Math.max(0, Math.min(1, baseMixFactor + (equilibriumPosition - 0.5)));
+        const mixFactor = Math.max(0, Math.min(1, baseMixFactor + (historicalEquilibrium - 0.5)));
 
         const colour = new three.Color();
         colour.lerpColors(colourA, colourB, mixFactor);
@@ -115,7 +123,7 @@ function animate() {
     slider.value = sliderPosition;
 
     updateTerrain(equilibriumPosition);
-    updateColors(equilibriumPosition);
+    updateColours(equilibriumPosition);
 
     controls.update();
 
@@ -231,7 +239,7 @@ for (let i = 0; i < positions.count * 3; i++) {
 geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
 
 // Set initial colours based on equilibrium position
-updateColors(equilibriumPosition);
+updateColours(equilibriumPosition);
 
 const material = new three.MeshStandardMaterial({
     roughness: 0.65,
