@@ -36,12 +36,12 @@ systemsData.systems.forEach(system => {
 
 });
 
-let currentSystem = "btb" // btb, fescn, cu ammine, cu aqua, cobalt, co2
+let currentSystem = systems["btb"]; // btb, fescn, cu ammine, cu aqua, cobalt, co2
 
 const colours = [];
 
-const reactantColour = new three.Color(systems[currentSystem].reactantColour || 0xff0000);
-const productColour = new three.Color(systems[currentSystem].productColour || 0x0000ff);
+const reactantColour = new three.Color(currentSystem.reactantColour || 0xff0000);
+const productColour = new three.Color(currentSystem.productColour || 0x0000ff);
 
 let frameCount = 0;
 const simulationSpeed = 1/150;
@@ -211,6 +211,17 @@ const geometry = new three.PlaneGeometry(
 );
 
 updateTerrain(equilibriumPosition );
+
+const systemSelect = document.getElementById("equilibrium-selector");
+systemSelect.addEventListener("change", (e) => {
+    currentSystem = systems[e.target.value];
+
+    reactantColour.set(currentSystem.reactantColour || 0xff0000);
+    productColour.set(currentSystem.productColour || 0x0000ff);
+
+    updateColours(equilibriumPosition);
+
+})
 
 const slider = document.getElementById("equilibrium-slider");
 slider.addEventListener("input", (e) => {

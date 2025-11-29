@@ -47,7 +47,7 @@
     },
     {
         "id": "co2",
-        "name": "Carbon Dioxide Acid-Base",
+        "name": "Carbon Dioxide in Water",
         "equation": "CO₂(aq) + H₂O(l) ⇌ H₂CO₃(aq) ⇌ H⁺(aq) + HCO₃⁻(aq)",
         "reactantColour": "#E8F4F8",
         "productColour": "#FFE5B4",

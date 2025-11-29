@@ -9,7 +9,21 @@
     </head>
 
     <body>
-        <div class = "ui"> 
+        <div class = "top-display">
+            <div class = "system-selector">
+                <select id = "equilibrium-selector">
+                    <option value = "btb">Bromothymol Blue</option>
+                    <option value = "fescn">Iron Thiocyanate</option>
+                    <option value = "cu ammine">Copper Ammine</option>
+                    <option value = "cu aqua">Copper Aqua-Chloro</option>
+                    <option value = "cobalt">Cobalt Aqua-Chloro</option>
+                    <option value = "co2">Carbon Dioxide in Water</option>
+
+                </select>
+            </div>
+        </div>
+
+        <div class = "controls-block">
             <div class = "slider-container">
                 <input type = "range" id = "equilibrium-slider" min = "0" max = "100" value = 50 />
 
@@ -24,7 +38,7 @@
             <div class = "stress-buttons">
                 <button data-stress = "reactant">Increase [Reactants]</button>
                 <button data-stress = "product">Increase [Products]</button>
-                
+
                 <button data-stress = "heat">Heat</button>
                 <button data-stress = "cool">Cool</button>
 
