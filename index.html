@@ -9,24 +9,46 @@
     </head>
 
     <body>
-        <div class = "top-display">
-            <div class = "system-selector">
-                <select id = "equilibrium-selector">
-                    <option value = "btb">Bromothymol Blue</option>
-                    <option value = "fescn">Iron Thiocyanate</option>
-                    <option value = "cu ammine">Copper Ammine</option>
-                    <option value = "cu aqua">Copper Aqua-Chloro</option>
-                    <option value = "cobalt">Cobalt Aqua-Chloro</option>
-                    <option value = "co2">Carbon Dioxide in Water</option>
+        <body>
+        <div class="explanation-panel">
+            <button id="toggle-explanation">About</button>
+            <div id="explanation-content" class="hidden">
+                <h3>Le Chatelier's Principle Visualizer</h3>
 
-                </select>
+                <p><strong>What you're seeing:</strong></p>
+                <ul>
+                    <li><strong>Left peak:</strong> Reactant concentration</li>
+                    <li><strong>Right peak:</strong> Product concentration</li>
+                    <li><strong>Timeline:</strong> Flows from back (past) to front (present)</li>
+                    <li><strong>Height:</strong> Relative concentration of species</li>
+                    <li><strong>Colour:</strong> Shows equilibrium position (reactant colour → product colour)</li>
+
+                </ul>
+                <p><strong>Le Chatelier's Principle:</strong> When a stress is applied to a system at equilibrium, the system shifts to counteract that stress</p>
+                <p><strong>Try it:</strong> Click stress buttons and watch how the equilibrium responds over time</p>
+
             </div>
+        </div>
 
+        <div class = "top-display">
             <div class = "info">
                 <div id = "equation">HIn(aq) ⇌ H⁺(aq) + In⁻(aq)</div>
+
                 <div class = "description" id = "description"><i>Acid-base Indicator Equilibrium</i></div>
 
             </div>
+        </div>
+
+        <div class = "system-selector">
+            <select id = "equilibrium-selector">
+                <option value = "btb">Bromothymol Blue</option>
+                <option value = "fescn">Iron Thiocyanate</option>
+                <option value = "cu ammine">Copper Ammine</option>
+                <option value = "cu aqua">Copper Aqua-Chloro</option>
+                <option value = "cobalt">Cobalt Aqua-Chloro</option>
+                <option value = "co2">Carbon Dioxide in Water</option>
+
+            </select>
         </div>
 
         <div class = "controls-block">
@@ -39,6 +61,12 @@
                     <span>Favours Products</span>
 
                 </div>
+                
+                <div class = "slider-labels">
+                    <span>K << 0</span>
+                    <span>K = 0</span>
+                    <span>K >> 0</span>
+                </div>
             </div>
 
             <div class = "stress-buttons">
@@ -48,7 +76,7 @@
                 <button data-stress = "heat">Heat</button>
                 <button data-stress = "cool">Cool</button>
 
-                <button data-stress = "reduce-concentration">Reduce [Solution]</button>
+                <button data-stress = "reduce-concentration">Dilute [Solution]</button>
 
             </div>
 

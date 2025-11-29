@@ -324,6 +324,14 @@ terrain.rotation.x = -Math.PI / 2;
 scene.add(terrain);
 terrain.position.z = -10;
 
+const toggleButton = document.getElementById("toggle-explanation");
+const explanationContent = document.getElementById("explanation-content");
+
+toggleButton.addEventListener("click", () => {
+    explanationContent.classList.toggle("hidden");
+    
+});
+
 animate();
 
 // Handle window resize

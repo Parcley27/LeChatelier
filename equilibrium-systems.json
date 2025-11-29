@@ -7,7 +7,8 @@
       "reactantColour": "#E5C174",
       "productColour": "#4A7C97",
       "isEndothermic": true,
-      "description": "Acid-base Indicator Equilibrium"
+      "description": "Acid-base Indicator Equilibrium",
+      "labNotes": "Yellow (acidic form) ⇌ Blue (basic form). Green at neutral pH. Changes with addition of HCl or NaOH."
     },
     {
       "id": "fescn",
@@ -16,16 +17,18 @@
       "reactantColour": "#E8DCC4",
       "productColour": "#8B2635",
       "isEndothermic": false,
-      "description": "Iron(III) Thiocyanate Complex Formation"
+      "description": "Iron(III) Thiocyanate Complex Formation",
+      "labNotes": "Pale yellow ⇌ Blood red. Adding Fe³⁺ or SCN⁻ shifts toward red FeSCN²⁺ complex. Phosphate ions remove Fe³⁺."
     },
     {
       "id": "cu ammine",
       "name": "Copper Ammine",
       "equation": "[Cu(H₂O)₆]²⁺(aq) + 4NH₃(aq) ⇌ [Cu(NH₃)₄(H₂O)₂]²⁺(aq) + 4H₂O(l)",
-      "reactantColour": "#87CEEB",
+      "reactantColour": "#7EC8BD",
       "productColour": "#0047AB",
       "isEndothermic": true,
-      "description": "Copper(II) Ammine Complex Equilibrium"
+      "description": "Copper(II) Ammine Complex Equilibrium",
+      "labNotes": "Blue-green aqua complex ⇌ Deep blue ammine complex. HCl removes NH₃ (shifts left). Adding NH₃ shifts right."
     },
     {
       "id": "cu aqua",
@@ -34,7 +37,8 @@
       "reactantColour": "#5B9FD5",
       "productColour": "#2E5C3F",
       "isEndothermic": true,
-      "description": "Copper(II) Chloride Complex Equilibrium"
+      "description": "Copper(II) Chloride Complex Equilibrium",
+      "labNotes": "Blue-green aqua complex ⇌ Green chloro complex. HCl adds Cl⁻ (shifts right). Water dilutes (shifts left)."
     },
     {
       "id": "cobalt",
@@ -43,16 +47,18 @@
       "reactantColour": "#D4A5C5",
       "productColour": "#3B5F8F",
       "isEndothermic": true,
-      "description": "Cobalt(II) Chloride Complex Equilibrium"
+      "description": "Cobalt(II) Chloride Complex Equilibrium",
+      "labNotes": "Pink aqua complex ⇌ Blue chloro complex. Endothermic: heat shifts right (blue), cold shifts left (pink). NaCl or acetone shifts right."
     },
     {
-        "id": "co2",
-        "name": "Carbon Dioxide in Water",
-        "equation": "CO₂(aq) + H₂O(l) ⇌ H₂CO₃(aq) ⇌ H⁺(aq) + HCO₃⁻(aq)",
-        "reactantColour": "#E8F4F8",
-        "productColour": "#FFE5B4",
-        "isEndothermic": false,
-        "description": "Carbon Dioxide Acidity Equilibrium"
+      "id": "co2",
+      "name": "Carbon Dioxide in Water",
+      "equation": "CO₂(aq) + H₂O(l) ⇌ H₂CO₃(aq) ⇌ H⁺(aq) + HCO₃⁻(aq)",
+      "reactantColour": "#E5C174",
+      "productColour": "#FF6B9D",
+      "isEndothermic": false,
+      "description": "Carbon Dioxide Acidity Equilibrium",
+      "labNotes": "CO₂ dissolves to form carbonic acid (acidic, yellow indicator) ⇌ Carbonate/bicarbonate ions (basic, pink indicator). Pressure increases dissolution."
     }
   ]
 }
