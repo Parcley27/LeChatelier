@@ -77,7 +77,7 @@ function updateTerrain(equilibriumPosition ) {
 
 function updateColors(equilibriumPosition) {
     const positions = geometry.attributes.position;
-    const colorAttribute = geometry.attributes.color;
+    const colourAttribute = geometry.attributes.color;
 
     for (let i = 0; i < positions.count; i++) {
         const x = positions.getX(i);
@@ -93,11 +93,11 @@ function updateColors(equilibriumPosition) {
         const colour = new three.Color();
         colour.lerpColors(colourA, colourB, mixFactor);
 
-        colorAttribute.setXYZ(i, colour.r, colour.g, colour.b);
+        colourAttribute.setXYZ(i, colour.r, colour.g, colour.b);
 
     }
 
-    colorAttribute.needsUpdate = true;
+    colourAttribute.needsUpdate = true;
 
 }
 
@@ -223,14 +223,14 @@ buttons.forEach(button => {
 })
 
 const positions = geometry.attributes.position;
-// Initialize colors array with zeros
+// Initialize colours array with zeros
 for (let i = 0; i < positions.count * 3; i++) {
     colours.push(0);
 }
 
 geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
 
-// Set initial colors based on equilibrium position
+// Set initial colours based on equilibrium position
 updateColors(equilibriumPosition);
 
 const material = new three.MeshStandardMaterial({
