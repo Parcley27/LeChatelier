@@ -15,9 +15,9 @@ The landscape uses two peaks to represent equilibrium:
 - **Right peak**: product concentration
 - **Height**: relative concentration of each species
 - **Colour**: blends from reactant colour → product colour based on equilibrium position
-- **Timeline**: flows from back (past) to front (present)
+- **Timeline**: flows from front (present) to back (past)
 
-When equilibrium shifts, you see the peaks change height and the colour gradient move across the terrain. The temporal dimension shows how disturbances propagate through time—stresses applied in the past create waves that flow forward until the system reaches a new equilibrium.
+When equilibrium shifts, you see the peaks change height and the colour gradient move across the terrain. The temporal dimension shows how disturbances propagate through time-stresses applied in the past create waves that flow forward until the system reaches a new equilibrium.
 
 ### Controls
 
@@ -57,11 +57,11 @@ Each system has distinct colours from the lab. For example:
 
 The colour shifts you observed in the lab when adding reagents are recreated here. Adding Cl⁻ to cobalt shifts toward blue [CoCl₄]²⁻, and the landscape becomes increasingly blue as the product peak grows.
 
-Temperature effects follow thermodynamics. For endothermic reactions, heat acts like a reactant—adding heat shifts toward products. For exothermic reactions, heat is like a product—adding heat shifts toward reactants. The cobalt system is endothermic in the forward direction, so heating intensifies the blue colour, matching lab observations.
+Temperature effects follow thermodynamics. For endothermic reactions, heat acts like a reactant-adding heat shifts toward products. For exothermic reactions, heat is like a product-adding heat shifts toward reactants. The cobalt system is endothermic in the forward direction, so heating intensifies the blue colour, matching lab observations.
 
 ### Beyond Simple Shifts
 
-The visualization shows that adding reactant doesn't just shift the equilibrium—it also increases total concentration. Both peaks initially rise when you add material, then the system redistributes toward products. This matches the molecular reality: you've added particles that participate in collisions, temporarily increasing both concentrations before equilibrium re-establishes.
+The visualization shows that adding reactant doesn't just shift the equilibrium-it also increases total concentration. Both peaks initially rise when you add material, then the system redistributes toward products. This matches the molecular reality: you've added particles that participate in collisions, temporarily increasing both concentrations before equilibrium re-establishes.
 
 ## Viewing the project
 The site will be up on [https://lechat.airtraffic.online](https://lechat.airtraffic.online) for as long as I don't have my personal website published.
