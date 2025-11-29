@@ -13,6 +13,10 @@ const terrainResolution = 128; // 2^6
 const startingHeight = 15;
 const hillAmplitude = 20;
 
+const historyLength = 2100;
+const equilibriumHistory = new Array(historyLength).fill(0.5);
+let historyIndex = 0;
+
 let targetingSpeed = 0.02;
 
 let equilibriumPosition  = 0.5;
@@ -27,7 +31,7 @@ const colourA = new three.Color(0xff0000);
 const colourB = new three.Color(0x0000ff);
 
 let frameCount = 0;
-const simulationSpeed = 1/300;
+const simulationSpeed = 1/150;
 
 const noise = createNoise2D();
 const noiseAmplitude = 0.40;
@@ -36,16 +40,25 @@ const noiseResultion = 0.15;
 function updateTerrain(equilibriumPosition ) {
     const positions = geometry.attributes.position;
 
-    frameCount += 1;
+    frameCount++;
+
+    // Update history buffer
+    historyIndex = (historyIndex + 1) % historyLength;
+    equilibriumHistory[historyIndex] = equilibriumPosition;
 
     for (let i = 0; i < positions.count; i++) {
         let x = positions.getX(i);
         let y = positions.getY(i)
 
+        const normalizedY = (y + terrainSize / 2) / terrainSize; // 0 ... 1
+        const historyLookback = Math.floor(normalizedY * (historyLength - 1));
+        const lookbackIndex = (historyIndex - historyLookback + historyLength) % historyLength;
+        const historicalEquilibrium = equilibriumHistory[lookbackIndex];
+
         // Height graph
         //https://www.desmos.com/3d/btdxdtzb4d
-        const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - equilibriumPosition );
-        const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * equilibriumPosition ;
+        const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - historicalEquilibrium );
+        const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * historicalEquilibrium ;
 
         // Noise for texture
         const noiseValue = noise(x * noiseResultion, y * noiseResultion - frameCount * simulationSpeed) * noiseAmplitude;
@@ -158,9 +171,9 @@ controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
 // Planes are defined as vertical by default
 const geometry = new three.PlaneGeometry(
     terrainSize, // Width
-    terrainSize, // Height
+    terrainSize, // Time
     terrainResolution, // Width resolution
-    terrainResolution // Height resolution
+    terrainResolution * 2 // Time resolution
 
 );
 
