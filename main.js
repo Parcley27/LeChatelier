@@ -4,7 +4,7 @@
 // z is back ... front
 
 import * as three from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { createNoise2D} from 'simplex-noise';
 import systemsData from "./equilibrium-systems.json";
 
@@ -14,7 +14,7 @@ const terrainResolution = 128; // 2^6
 const startingHeight = 15;
 const hillAmplitude = 20;
 
-const historyLength = 2100;
+const historyLength = 5000;
 const equilibriumHistory = new Array(historyLength).fill(0.5);
 const concentrationHistory = new Array(historyLength).fill(1.0);
 let historyIndex = 0;
@@ -51,7 +51,7 @@ const noiseAmplitude = 0.25;
 const noiseResultion = 0.15;
 
 function getHistory(y) {
-    const normalizedY = (y + terrainSize / 2) / terrainSize; // 0 ... 1
+    const normalizedY = (y + terrainSize) / (2 * terrainSize); // 0 ... 1
     const historyLookback = Math.floor(normalizedY * (historyLength - 1));
     const lookbackIndex = (historyIndex - historyLookback + historyLength) % historyLength;
 
@@ -112,7 +112,7 @@ function updateColours(equilibriumPosition) {
         const historicalEquilibrium = getHistory(y).equilibrium;
 
         // Base mix factor from position (0 = left/red, 1 = right/blue)
-        const baseMixFactor = (x + 50) / 100;
+        const baseMixFactor = (x + terrainSize / 2) / terrainSize;
 
         // Adjust mix factor based on equilibrium position
         // When equilibrium is right (1.0), bias toward blue
@@ -150,7 +150,7 @@ function animate() {
     updateTerrain(equilibriumPosition);
     updateColours(equilibriumPosition);
 
-    controls.update();
+    //controls.update();
 
     renderer.render(scene, camera);
 
@@ -158,7 +158,8 @@ function animate() {
 
 // Create scene
 const scene = new three.Scene();
-scene.background = new three.Color(0x000000);
+scene.background = null; // No background - shows through to CSS background
+scene.fog = new three.Fog(0x0B0F19, 60, 200); // Fog that matches CSS background
 
 // Create camera
 const camera = new three.PerspectiveCamera(
@@ -189,22 +190,25 @@ fillLight.position.set(0, -10, 0);
 scene.add(fillLight);
 
 // Create renderer
-const renderer = new three.WebGLRenderer({ antialias: true });
+const renderer = new three.WebGLRenderer({ 
+    antialias: true,
+    alpha: true // Enable transparency
+});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement); // Add canvas to page
 
 // Orbit controls
-const controls = new OrbitControls(camera, renderer.domElement);
+//const controls = new OrbitControls(camera, renderer.domElement);
 
-controls.enableDamping = true;
-controls.dampingFactor = 0.1;
-controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
+//controls.enableDamping = true;
+//controls.dampingFactor = 0.1;
+//controls.maxPolarAngle = Math.PI / 2.2; // Prevent ground clipping
 
 // Create geometry plane
 // Planes are defined as vertical by default
 const geometry = new three.PlaneGeometry(
     terrainSize, // Width
-    terrainSize, // Time
+    terrainSize * 2, // Time
     terrainResolution, // Width resolution
     terrainResolution * 2 // Time resolution
 
@@ -322,7 +326,7 @@ const terrain = new three.Mesh(geometry, material);
 terrain.rotation.x = -Math.PI / 2;
 
 scene.add(terrain);
-terrain.position.z = -10;
+terrain.position.z = -60;
 
 const toggleButton = document.getElementById("toggle-explanation");
 const explanationContent = document.getElementById("explanation-content");
