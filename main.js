@@ -5,9 +5,10 @@
 
 import * as three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { createNoise2D} from 'simplex-noise';
 
 const terrainSize = 100;
-const terrainResolution = 64; // 2^6
+const terrainResolution = 128; // 2^6
 
 const startingHeight = 15;
 const hillAmplitude = 20;
@@ -22,18 +23,26 @@ let targetSliderPosition = sliderPosition;
 
 const colours = [];
 
+const noise = createNoise2D();
+const noiseAmplitude = 0.40;
+const noiseResultion = 0.15;
+
 function updateTerrain(equilibriumPosition ) {
     const positions = geometry.attributes.position;
 
     for (let i = 0; i < positions.count; i++) {
         let x = positions.getX(i);
+        let y = positions.getY(i)
 
         // Height graph 
         //https://www.desmos.com/3d/btdxdtzb4d
         const leftPeak = Math.exp(-Math.pow((x + startingHeight * 2) / startingHeight, 2)) * hillAmplitude * (1 - equilibriumPosition );
         const rightPeak = Math.exp(-Math.pow((x - startingHeight * 2) / startingHeight, 2)) * hillAmplitude * equilibriumPosition ;
 
-        const height = leftPeak + rightPeak;
+        // Noise for texture
+        const noiseValue = noise(x * noiseResultion, y * noiseResultion) * noiseAmplitude;
+
+        const height = leftPeak + rightPeak + (noiseValue * x / 20);
 
         positions.setZ(i, height);
       
