@@ -105,10 +105,11 @@ for (let i = 0; i < positions.count; i++) {
 geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
 
 const material = new three.MeshStandardMaterial({
-  vertexColors: true,
   roughness: 0.65,
   metalness: 0.2,
-  wireframe: false
+  wireframe: false,
+  vertexColors: true,
+  side: three.DoubleSide
 
 });
 
