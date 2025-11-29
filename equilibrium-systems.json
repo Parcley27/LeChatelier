@@ -7,7 +7,7 @@
       "reactantColour": "#E5C174",
       "productColour": "#4A7C97",
       "isEndothermic": true,
-      "description": "Acid-base indicator equilibrium"
+      "description": "Acid-base Indicator Equilibrium"
     },
     {
       "id": "fescn",
@@ -16,7 +16,7 @@
       "reactantColour": "#E8DCC4",
       "productColour": "#8B2635",
       "isEndothermic": false,
-      "description": "Iron(III) thiocyanate complex formation"
+      "description": "Iron(III) Thiocyanate Complex Formation"
     },
     {
       "id": "cu ammine",
@@ -25,7 +25,7 @@
       "reactantColour": "#87CEEB",
       "productColour": "#0047AB",
       "isEndothermic": true,
-      "description": "Copper(II) ammine complex equilibrium"
+      "description": "Copper(II) Ammine Complex Equilibrium"
     },
     {
       "id": "cu aqua",
@@ -34,7 +34,7 @@
       "reactantColour": "#5B9FD5",
       "productColour": "#2E5C3F",
       "isEndothermic": true,
-      "description": "Copper(II) chloride complex equilibrium"
+      "description": "Copper(II) Chloride Complex Equilibrium"
     },
     {
       "id": "cobalt",
@@ -43,7 +43,7 @@
       "reactantColour": "#D4A5C5",
       "productColour": "#3B5F8F",
       "isEndothermic": true,
-      "description": "Cobalt(II) chloride complex equilibrium"
+      "description": "Cobalt(II) Chloride Complex Equilibrium"
     },
     {
         "id": "co2",
@@ -52,7 +52,7 @@
         "reactantColour": "#E8F4F8",
         "productColour": "#FFE5B4",
         "isEndothermic": false,
-        "description": "Carbon dioxide acidity equilibrium"
+        "description": "Carbon Dioxide Acidity Equilibrium"
     }
   ]
 }
