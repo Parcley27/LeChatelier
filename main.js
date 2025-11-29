@@ -13,6 +13,7 @@ const startingHeight = 15;
 const hillAmplitude = 20;
 
 let equilibriumPosition  = 0.5;
+let targetPosition = equilibriumPosition;
 
 const colours = [];
 
@@ -42,6 +43,16 @@ function updateTerrain(equilibriumPosition ) {
 // Animation loop
 function animate() {
     requestAnimationFrame(animate);
+
+    // Smooth transition between actual and target positions
+    const difference = targetPosition - equilibriumPosition;
+    equilibriumPosition  += difference * 0.04;
+
+    // Only update terrain if there's a sensible difference
+    if (Math.abs(difference) > 0.001) {
+        updateTerrain(equilibriumPosition);
+
+    }
 
     controls.update();
 
@@ -107,8 +118,7 @@ updateTerrain(equilibriumPosition );
 
 const slider = document.getElementById("equilibrium-slider");
 slider.addEventListener("input", (e) => {
-    equilibriumPosition = parseFloat(e.target.value) / 100;
-    updateTerrain(equilibriumPosition);
+    targetPosition = parseFloat(e.target.value) / 100;
 
 })
 
