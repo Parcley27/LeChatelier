@@ -41,11 +41,11 @@ function updateTerrain(equilibriumPosition ) {
 
 // Animation loop
 function animate() {
-  requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
-  controls.update();
+    controls.update();
 
-  renderer.render(scene, camera);
+    renderer.render(scene, camera);
 
 }
 
@@ -55,10 +55,10 @@ scene.background = new three.Color(0x000000);
 
 // Create camera
 const camera = new three.PerspectiveCamera(
-  75, // Field of view
-  window.innerWidth / window.innerHeight, // Aspect ratio
-  0.1, // Near clipping plane
-  1000 // Far clipping plane
+    75, // Field of view
+    window.innerWidth / window.innerHeight, // Aspect ratio
+    0.1, // Near clipping plane
+    1000 // Far clipping plane
 
 );
 
@@ -117,25 +117,25 @@ const colourB = new three.Color(0x0000ff);
 
 const positions = geometry.attributes.position;
 for (let i = 0; i < positions.count; i++) {
-  const x = positions.getX(i);
+    const x = positions.getX(i);
 
-  const mixFactor = (x + 50) / 100;
+    const mixFactor = (x + 50) / 100;
 
-  const colour = new three.Color();
-  colour.lerpColors(colourA, colourB, mixFactor);
+    const colour = new three.Color();
+    colour.lerpColors(colourA, colourB, mixFactor);
 
-  colours.push(colour.r, colour.g, colour.b);
+    colours.push(colour.r, colour.g, colour.b);
 
 }
 
 geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
 
 const material = new three.MeshStandardMaterial({
-  roughness: 0.65,
-  metalness: 0.2,
-  wireframe: false,
-  vertexColors: true,
-  side: three.DoubleSide
+    roughness: 0.65,
+    metalness: 0.2,
+    wireframe: false,
+    vertexColors: true,
+    side: three.DoubleSide
 
 });
 
@@ -150,8 +150,8 @@ animate();
 
 // Handle window resize
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
 });
