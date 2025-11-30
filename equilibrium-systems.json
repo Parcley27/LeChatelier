@@ -7,6 +7,7 @@
       "reactantColour": "#E5C174",
       "productColour": "#4A7C97",
       "isEndothermic": true,
+      "deltaN": 1,
       "description": "Acid-base Indicator Equilibrium",
       "labNotes": "Yellow (acidic form) ⇌ Blue (basic form). Green at neutral pH. Changes with addition of HCl or NaOH."
     },
@@ -17,6 +18,7 @@
       "reactantColour": "#E8DCC4",
       "productColour": "#8B2635",
       "isEndothermic": false,
+      "deltaN": -1,
       "description": "Iron(III) Thiocyanate Complex Formation",
       "labNotes": "Pale yellow ⇌ Blood red. Adding Fe³⁺ or SCN⁻ shifts toward red FeSCN²⁺ complex. Phosphate ions remove Fe³⁺."
     },
@@ -27,6 +29,7 @@
       "reactantColour": "#7EC8BD",
       "productColour": "#0047AB",
       "isEndothermic": true,
+      "deltaN": -4,
       "description": "Copper(II) Ammine Complex Equilibrium",
       "labNotes": "Blue-green aqua complex ⇌ Deep blue ammine complex. HCl removes NH₃ (shifts left). Adding NH₃ shifts right."
     },
@@ -37,6 +40,7 @@
       "reactantColour": "#5B9FD5",
       "productColour": "#2E5C3F",
       "isEndothermic": true,
+      "deltaN": -4,
       "description": "Copper(II) Chloride Complex Equilibrium",
       "labNotes": "Blue-green aqua complex ⇌ Green chloro complex. HCl adds Cl⁻ (shifts right). Water dilutes (shifts left)."
     },
@@ -47,6 +51,7 @@
       "reactantColour": "#D4A5C5",
       "productColour": "#3B5F8F",
       "isEndothermic": true,
+      "deltaN": -4,
       "description": "Cobalt(II) Chloride Complex Equilibrium",
       "labNotes": "Pink aqua complex ⇌ Blue chloro complex. Endothermic: heat shifts right (blue), cold shifts left (pink). NaCl or acetone shifts right."
     },
@@ -57,6 +62,7 @@
       "reactantColour": "#E5C174",
       "productColour": "#FF6B9D",
       "isEndothermic": false,
+      "deltaN": 1,
       "description": "Carbon Dioxide Acidity Equilibrium",
       "labNotes": "CO₂ dissolves to form carbonic acid (acidic, yellow indicator) ⇌ Carbonate/bicarbonate ions (basic, pink indicator). Pressure increases dissolution."
     }

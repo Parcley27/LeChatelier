@@ -20,6 +20,11 @@ const concentrationHistory = new Array(historyLength).fill(1.0);
 let historyIndex = 0;
 
 let targetingSpeed = 0.02 / 5;
+let equalizingPull = 0.02 / 5; // Increased to respond faster to temperature changes
+
+// Temperature tracking: -10 (cold) ... 0 (room temp) ... 10 (hot)
+let temperature = 0.0;
+const defaultTemperature = 0.0;
 
 const defaultEquilibriumPosition = 0.5;
 let equilibriumPosition  = defaultEquilibriumPosition;
@@ -31,6 +36,11 @@ let targetSliderPosition = sliderPosition;
 const defaultConcentration = 1.0;
 let totalConcentration = defaultConcentration;
 let targetConcentration = defaultConcentration;
+
+// Separate dilution factor that affects equilibrium but not hill amplitude
+const defaultDilution = 1.0;
+let dilution = defaultDilution;
+let targetDilution = defaultDilution;
 
 const systems = {};
 systemsData.systems.forEach(system => {
@@ -62,6 +72,35 @@ function getHistory(y) {
         concentration: concentrationHistory[lookbackIndex]
 
     };
+}
+
+// Calculate the ideal equilibrium position based on temperature and dilution
+// For endothermic: higher temp favors products (shifts right, toward 1.0)
+// For exothermic: higher temp favors reactants (shifts left, toward 0.0)
+// For dilution: shifts toward side with more particles (deltaN effect)
+function calculateIdealEquilibrium() {
+    // Base equilibrium is 0.5 (centered)
+    let equilibrium = 0.5;
+
+    // Temperature effect
+    const tempDeviation = temperature / 10.0; // -1.0 to +1.0
+    const tempSensitivity = 0.25;
+
+    if (currentSystem.isEndothermic) {
+        // Endothermic: heat shifts right (products), cold shifts left (reactants)
+        equilibrium += tempDeviation * tempSensitivity;
+    } else {
+        // Exothermic: heat shifts left (reactants), cold shifts right (products)
+        equilibrium -= tempDeviation * tempSensitivity;
+    }
+
+    // Dilution effect
+    // Lower dilution factor shifts toward side with more particles
+    const dilutionDeviation = dilution - defaultDilution; // negative when diluted
+    const dilutionSensitivity = 0.08;
+    equilibrium -= currentSystem.deltaN * dilutionDeviation * dilutionSensitivity;
+
+    return Math.max(0, Math.min(1, equilibrium));
 
 }
 
@@ -136,13 +175,27 @@ function updateColours(equilibriumPosition) {
 function animate() {
     requestAnimationFrame(animate);
 
+    // Calculate the ideal equilibrium position based on temperature and concentration
+    const idealEquilibrium = calculateIdealEquilibrium();
+
+    // Apply equalizing pull toward ideal equilibrium
+    // Use constant speed instead of proportional to avoid slowdown near target
+    const equalizingDifference = idealEquilibrium - targetPosition;
+    const pullDirection = Math.sign(equalizingDifference);
+    const pullMagnitude = Math.min(Math.abs(equalizingDifference), equalizingPull);
+    targetPosition += pullDirection * pullMagnitude;
+
     // Smooth transition between actual and target positions
     const difference = targetPosition - equilibriumPosition;
     equilibriumPosition  += difference * targetingSpeed;
 
-    // Transition for concentration
+    // Transition for concentration (affects hill amplitude)
     const concentrationDifference = targetConcentration - totalConcentration;
     totalConcentration += concentrationDifference * targetingSpeed;
+
+    // Transition for dilution (affects equilibrium position)
+    const dilutionDifference = targetDilution - dilution;
+    dilution += dilutionDifference * targetingSpeed;
 
     // Smooth transition for slider position
     const sliderDifference = targetSliderPosition - sliderPosition;
@@ -236,8 +289,11 @@ systemSelect.addEventListener("change", (e) => {
     targetPosition = defaultEquilibriumPosition;
     totalConcentration = defaultConcentration;
     targetConcentration = defaultConcentration;
+    dilution = defaultDilution;
+    targetDilution = defaultDilution;
     sliderPosition = defaultEquilibriumPosition * 100;
     targetSliderPosition = defaultEquilibriumPosition * 100;
+    temperature = defaultTemperature;
 
     // Clear history when reaction changes
     equilibriumHistory.fill(defaultEquilibriumPosition);
@@ -270,41 +326,50 @@ buttons.forEach(button => {
 
         switch (stress) {
             case "reactant":
-                targetPosition = Math.max(0, targetPosition - 0.1);
-                targetConcentration = Math.min(5.0, targetConcentration + 0.1);
-                
+                targetPosition = Math.max(0, targetPosition - 0.2);
+                targetConcentration = Math.max(0.5, targetConcentration + 0.1);
+
                 break;
-            
+
             case "product":
-                targetPosition = Math.min(1, targetPosition + 0.1);
-                targetConcentration = Math.min(5.0, targetConcentration + 0.1);
+                targetPosition = Math.min(1, targetPosition + 0.2);
+                targetConcentration = Math.max(0.5, targetConcentration + 0.1);
 
                 break;
             
             case "heat":
-                if (currentSystem.isEndothermic) {
-                    targetPosition = Math.min(1, targetPosition + 0.05);
+                // Increase temperature - the equalizing pull will handle shifting equilibrium
+                temperature = Math.min(10, temperature + 2);
+                console.log(`Heat: temp=${temperature.toFixed(1)}, isEndo=${currentSystem.isEndothermic}, idealEq=${calculateIdealEquilibrium().toFixed(3)}`);
+                
+                break;
 
-                } else {
-                    targetPosition = Math.max(0, targetPosition - 0.05);
-
-                }
-
+            case "cool":
+                // Decrease temperature - the equalizing pull will handle shifting equilibrium
+                temperature = Math.max(-10, temperature - 2);
+                console.log(`Cool: temp=${temperature.toFixed(1)}, isEndo=${currentSystem.isEndothermic}, idealEq=${calculateIdealEquilibrium().toFixed(3)}`);
+                
                 break;
             
-            case "cool":
-                if (currentSystem.isEndothermic) {
-                    targetPosition = Math.max(0, targetPosition - 0.05);
+            case "reduce-volume":
+                // Reduce volume (decreases hill amplitude/concentration only)
+                targetConcentration = Math.max(0.5, targetConcentration - 0.1);
+                console.log(`Reduce volume: concentration ${totalConcentration.toFixed(2)}->${targetConcentration.toFixed(2)}`);
+                
+                break;
+
+            case "dilute":
+                // Dilute system - equilibrium will shift automatically via calculateIdealEquilibrium
+                const oldDilution = targetDilution;
+                targetDilution = Math.max(0.1, targetDilution - 0.2);
+
+                if (targetDilution < oldDilution) {
+                    console.log(`Dilute: deltaN=${currentSystem.deltaN}, dilution ${oldDilution.toFixed(2)}->${targetDilution.toFixed(2)}, idealEq=${calculateIdealEquilibrium().toFixed(3)}`);
                 
                 } else {
-                    targetPosition = Math.min(1, targetPosition + 0.1);
+                    console.log(`Dilute: already at minimum dilution (0.1)`);
 
-                } 
-
-                break;
-            
-            case "reduce-concentration":
-                targetConcentration = Math.max(0.5, targetConcentration - 0.1);
+                }
 
                 break;
 
