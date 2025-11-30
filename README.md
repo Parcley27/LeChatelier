@@ -25,14 +25,21 @@ When equilibrium shifts, you see the peaks change height and the colour gradient
 
 **Stress buttons**:
 - Add reactant/product - shifts equilibrium away from the added species
-- Heat/cool - shifts based on reaction thermodynamics (endothermic vs exothermic)
-- Reduce concentration - demonstrates dilution effects
+- Heat/cool - adjusts temperature, which shifts equilibrium based on reaction thermodynamics (endothermic vs exothermic)
+- Dilute system - reduces concentration, shifting equilibrium toward the side with more particles (deltaN effect)
+- Reduce volume - decreases the visual hill amplitude without affecting equilibrium position
 
 **Manual slider**: Explore any equilibrium position between pure reactants and pure products.
 
 ### Technical Implementation
 
-Built with Three.js, the visualization renders a 3D plane using Gaussian functions to create the dual peaks. Each peak's height is calculated from the equilibrium position and total concentration, where each peak uses bell curve equations weighted by whether the system favors reactants or products at that moment. A circular buffer stores 2100 frames of equilibrium history, letting the y-axis represent time. As new equilibrium states are calculated, they push into the front of the landscape while old states recede into the distance.
+Built with Three.js, the visualization renders a 3D plane using Gaussian functions to create the dual peaks. Each peak's height is calculated from the equilibrium position and total concentration, where each peak uses bell curve equations weighted by whether the system favors reactants or products at that moment. A circular buffer stores 5000 frames of equilibrium history, letting the y-axis represent time. As new equilibrium states are calculated, they push into the front of the landscape while old states recede into the distance.
+
+The system uses an **equalizing pull mechanism** that constantly draws the equilibrium toward its ideal position based on current conditions. Temperature and dilution both affect this ideal equilibrium position:
+- **Temperature effects**: For endothermic reactions, higher temperatures shift the ideal equilibrium toward products; for exothermic reactions, toward reactants
+- **Dilution effects**: Lower concentration shifts equilibrium toward the side with more moles of particles (determined by Δn for each reaction)
+
+The simulation separates **concentration** (which controls visual hill amplitude) from **dilution** (which affects equilibrium position), allowing realistic representation of both volume changes and dilution stresses.
 
 Colour interpolation mixes the reactant and product colours based on both spatial position and the historical equilibrium state at each point, creating smooth colour transitions that represent the actual visible changes you'd observe in the lab.
 
@@ -61,7 +68,13 @@ Temperature effects follow thermodynamics. For endothermic reactions, heat acts 
 
 ### Beyond Simple Shifts
 
-The visualization shows that adding reactant doesn't just shift the equilibrium-it also increases total concentration. Both peaks initially rise when you add material, then the system redistributes toward products. This matches the molecular reality: you've added particles that participate in collisions, temporarily increasing both concentrations before equilibrium re-establishes.
+The visualization separates different types of stresses:
+
+**Adding reactants/products**: Shifts the equilibrium position without changing hill amplitude. This represents the concentration stress causing the system to shift away from the added species according to Le Chatelier's Principle.
+
+**Dilution**: Reduces the dilution factor, which shifts equilibrium toward the side with more moles of particles. For example, in reactions where Δn > 0 (more product particles than reactant particles), dilution shifts toward products. This demonstrates how equilibrium position depends on concentration through the reaction quotient Q.
+
+**Temperature changes**: Continuously pull the equilibrium toward a temperature-dependent ideal position. For endothermic reactions, heat shifts toward products (treating heat as a reactant). For exothermic reactions, heat shifts toward reactants (treating heat as a product). The system gradually drifts to the new equilibrium, showing the dynamic nature of temperature-dependent equilibrium constants.
 
 ## Viewing the project
 The site will be up on [https://lechat.airtraffic.online](https://lechat.airtraffic.online) for as long as I don't have my personal website published.
