@@ -89,15 +89,18 @@ function calculateIdealEquilibrium() {
     if (currentSystem.isEndothermic) {
         // Endothermic: heat shifts right (products), cold shifts left (reactants)
         equilibrium += tempDeviation * tempSensitivity;
+
     } else {
         // Exothermic: heat shifts left (reactants), cold shifts right (products)
         equilibrium -= tempDeviation * tempSensitivity;
+
     }
 
     // Dilution effect
     // Lower dilution factor shifts toward side with more particles
     const dilutionDeviation = dilution - defaultDilution; // negative when diluted
     const dilutionSensitivity = 0.08;
+    
     equilibrium -= currentSystem.deltaN * dilutionDeviation * dilutionSensitivity;
 
     return Math.max(0, Math.min(1, equilibrium));
@@ -381,9 +384,11 @@ buttons.forEach(button => {
 })
 
 const positions = geometry.attributes.position;
+
 // Initialize colours array with zeros
 for (let i = 0; i < positions.count * 3; i++) {
     colours.push(0);
+
 }
 
 geometry.setAttribute('color', new three.Float32BufferAttribute(colours, 3));
