@@ -77,4 +77,6 @@ The visualization separates different types of stresses:
 **Temperature changes**: Continuously pull the equilibrium toward a temperature-dependent ideal position. For endothermic reactions, heat shifts toward products (treating heat as a reactant). For exothermic reactions, heat shifts toward reactants (treating heat as a product). The system gradually drifts to the new equilibrium, showing the dynamic nature of temperature-dependent equilibrium constants.
 
 ## Viewing the project
-The site will be up on [https://lechat.airtraffic.online](https://lechat.airtraffic.online) for as long as I don't have my personal website published.
+The project can be viewed at [lechat.pierceoxley.ca](https://lechat.pierceoxley.ca). Enjoy!
+
+Note that this is a redirect from the old link at [lechat.airtraffic.online](https://lechat.pierceoxley.ca) as I've recently started on my personal website.
